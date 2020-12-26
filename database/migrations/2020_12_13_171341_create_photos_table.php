@@ -19,6 +19,7 @@ class CreatePhotosTable extends Migration
             $table->string('filename', 256);
             $table->text('path');
             $table->double('brightness');
+            $table->double('proximity');
             $table->timestamps();
         });
     }
