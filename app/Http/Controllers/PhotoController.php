@@ -16,7 +16,9 @@ class PhotoController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:256',
             'filename' => 'required|string|max:256',
-            'photofile' => ['required', 'string', new Base64Image(8192)]
+            'photofile' => ['required', 'string', new Base64Image(8192)],
+            'proximity' => 'numeric',
+            'brightness' => 'numeric'
         ]);
 
         if ($validator->fails()) {
@@ -25,12 +27,17 @@ class PhotoController extends Controller
 
         $filename = $request->input('filename');
         $photofile = $request->input('photofile');
+        $proximity = $request->input('proximity');
+        $brightness = $request->input('brightness');
+
         Storage::put('public/photos/' . $filename, base64_decode($photofile));
         // $request->file('photofile')->storeAs('public/photos', $filename);
         Photo::create([
             'name' => $request->input('name'),
             'filename' => $filename,
-            'path' => 'storage/photos/' . $filename
+            'path' => 'storage/photos/' . $filename,
+            'proximity' => $proximity,
+            'brightness' => $brightness
         ]);
         return response()->json(['status' => "success", 'message' => "Foto tersimpan"], 201);
     }
